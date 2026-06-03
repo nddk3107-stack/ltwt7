@@ -1,0 +1,120 @@
+@model IEnumerable<CourseRegistration.Models.Course>
+@{
+    ViewData["Title"] = "Quản lý học phần";
+    var search = ViewData["Search"] as string;
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">
+            <i class="bi bi-gear-fill text-primary me-2"></i>Quản lý học phần
+        </h2>
+        <p class="text-muted mb-0">Thêm, sửa, xóa và tìm kiếm các học phần trong hệ thống</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary btn-lg shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i>Thêm học phần
+    </a>
+</div>
+
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="input-group input-group-lg shadow-sm">
+        <span class="input-group-text bg-white">
+            <i class="bi bi-search text-muted"></i>
+        </span>
+        <input type="text"
+               name="search"
+               value="@search"
+               class="form-control"
+               placeholder="Tìm theo tên học phần, giảng viên hoặc danh mục..." />
+        @if (!string.IsNullOrWhiteSpace(search))
+        {
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        }
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-search me-1"></i>Tìm kiếm
+        </button>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(search))
+{
+    <div class="mb-3">
+        <span class="badge bg-info-subtle text-info-emphasis fs-6 px-3 py-2">
+            <i class="bi bi-funnel me-1"></i>
+            Kết quả tìm kiếm cho "<strong>@search</strong>": @Model.Count() học phần
+        </span>
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 60px">#</th>
+                        <th style="width: 80px">Hình</th>
+                        <th>Tên học phần</th>
+                        <th>Danh mục</th>
+                        <th class="text-center">Tín chỉ</th>
+                        <th>Giảng viên</th>
+                        <th class="text-center" style="width: 220px">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                                Không tìm thấy học phần phù hợp.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        var index = 0;
+                        foreach (var course in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="text-muted">@index</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(course.Image))
+                                    {
+                                        <img src="@course.Image" alt="@course.Name" class="rounded"
+                                             style="width:50px;height:50px;object-fit:cover;"
+                                             loading="lazy" onerror="this.onerror=null;this.src='/images/placeholder.svg'" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-primary bg-opacity-10 rounded d-flex align-items-center justify-content-center"
+                                             style="width:50px;height:50px;">
+                                            <i class="bi bi-book text-primary"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="fw-semibold">@course.Name</td>
+                                <td><span class="badge bg-info-subtle text-info-emphasis">@course.Category?.Name</span></td>
+                                <td class="text-center"><span class="badge bg-primary rounded-pill">@course.Credits</span></td>
+                                <td>@course.Lecturer</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit" asp-route-id="@course.Id" class="btn btn-outline-warning">
+                                            <i class="bi bi-pencil-square me-1"></i>Sửa
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@course.Id" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash me-1"></i>Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

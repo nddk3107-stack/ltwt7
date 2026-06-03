@@ -1,0 +1,54 @@
+@model CourseRegistration.Models.Course
+@{
+    ViewData["Title"] = "Xóa học phần";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Xác nhận xóa học phần</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle me-1"></i>
+                    Bạn có chắc chắn muốn xóa học phần này? Hành động này không thể hoàn tác.
+                </div>
+
+                <div class="card bg-light border-0 mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(Model.Image))
+                            {
+                                <img src="@Model.Image" alt="@Model.Name" class="rounded me-3"
+                                     style="width:80px;height:80px;object-fit:cover;"
+                                     onerror="this.style.display='none'" />
+                            }
+                            <div>
+                                <h5 class="fw-bold mb-1">@Model.Name</h5>
+                                <p class="text-muted mb-1">
+                                    <i class="bi bi-person-badge me-1"></i>@Model.Lecturer
+                                </p>
+                                <span class="badge bg-primary">@Model.Credits tín chỉ</span>
+                                <span class="badge bg-info">@Model.Category?.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="bi bi-trash me-1"></i>Xóa học phần
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+@model CourseRegistration.Models.Course
+@{
+    ViewData["Title"] = "Sửa học phần";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Sửa học phần</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold">Tên học phần <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control form-control-lg" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Credits" class="form-label fw-semibold">Số tín chỉ <span class="text-danger">*</span></label>
+                            <input asp-for="Credits" class="form-control" type="number" min="1" max="10" />
+                            <span asp-validation-for="Credits" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="CategoryId" class="form-label fw-semibold">Danh mục <span class="text-danger">*</span></label>
+                            <select asp-for="CategoryId" asp-items="@(ViewBag.Categories as SelectList)" class="form-select">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Lecturer" class="form-label fw-semibold">Giảng viên <span class="text-danger">*</span></label>
+                        <input asp-for="Lecturer" class="form-control" />
+                        <span asp-validation-for="Lecturer" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Hình ảnh hiện tại</label>
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.Image" alt="@Model.Name" class="rounded shadow-sm"
+                                     style="max-width:200px;max-height:150px;object-fit:cover;"
+                                     onerror="this.style.display='none'" />
+                            </div>
+                        }
+                        <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                        <div class="form-text">Để trống nếu không muốn thay đổi hình ảnh.</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-warning px-4">
+                            <i class="bi bi-check-lg me-1"></i>Cập nhật
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
